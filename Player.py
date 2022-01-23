@@ -23,57 +23,55 @@ def load_image(name, color_key=None):
 class Player(pygame.sprite.Sprite):
     def __init__(self, x_pos=30, y_pos=30, *groups):
         super().__init__(groups)
-        filename = os.path.join('playerAnim', 'idle', 'anim0.png')
-        self.image = load_image(filename)
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x_pos, y_pos)
         self.idle_animation = []
         self.fight_animation = []
         self.dead_animation = []
         self.run_animation = []
-        self.current_animation = 'idle'
         self.current_frame = 0
-        self.transparent = (0, 0, 0, 0)
-        self.setup_animation()
+        self.cut_idle_animation()
+        self.image = self.idle_animation[self.current_frame]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x_pos, y_pos)
+        self.current_animation = 'idle'
 
     def change_anim(self, new_animation):
         try:
             assert new_animation in ['idle', 'run', 'fight', 'dead']
         except AssertionError:
-            print('Wrong animation')
+            print('Wrong name animation')
         else:
             self.current_frame = 0
             self.current_animation = new_animation
 
-    def setup_animation(self):
-        main_str = 'anim'
-        self.idle_animation = []
-        path = os.path.join('playerAnim', 'idle')
+    def cut_idle_animation(self):
+        sheet = load_image(os.path.join('PlayerAnim.png'))
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // 11,
+                                100)
+
         for i in range(11):
-            img_name = main_str + str(i) + '.png'
-            self.idle_animation.append(load_image(os.path.join(path, img_name)))
+            frame_location = (self.rect.w * i, 0)
+            self.idle_animation.append(sheet.subsurface(pygame.Rect(
+                frame_location, self.rect.size)))
 
     def get_position(self):
         return self.rect.x, self.rect.y
 
     def update(self):
+        self.current_frame += 1
         if self.current_animation == 'idle':
-            self.current_frame += 1
             self.current_frame %= len(self.idle_animation)
 
             self.image = self.idle_animation[self.current_frame]
+            rect = self.image.get_rect()
         elif self.current_animation == ' run':
-            self.current_frame += 1
             self.current_frame %= len(self.run_animation)
 
             self.image = self.idle_animation[self.current_frame]
         elif self.current_animation == 'fight':
-            self.current_frame += 1
             self.current_frame %= len(self.fight_animation)
 
             self.image = self.idle_animation[self.current_frame]
         else:
-            self.current_frame += 1
             self.current_frame %= len(self.dead_animation)
 
             self.image = self.idle_animation[self.current_frame]

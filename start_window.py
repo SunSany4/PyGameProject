@@ -20,7 +20,7 @@ def main():
     pygame.init()
     pygame.font.init()
     player_group = pygame.sprite.Group()
-    player = Player(600, 300, player_group)
+    player = Player(550, 300, player_group)
     text = ['Кликните мышкой в любое место, чтобы начать игру']
     size = [700, 400]
     screen = pygame.display.set_mode(size)
@@ -40,7 +40,6 @@ def main():
                 return
         if ticks == 450:
             player_group.update()
-            print(player.current_frame)
             ticks = 0
         ticks += 1
         clear_screen(screen, fon, text, font, text_coord)

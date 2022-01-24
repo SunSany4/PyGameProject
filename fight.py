@@ -3,34 +3,41 @@ import os
 import sys
 import math
 from random import random
+from Player import Player
 
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, x_pos=30, y_pos=30, *groups):
-        super().__init__(groups)
-        filename = os.path.join('data', 'player.png')
-        self.image = pygame.image.load(filename)
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x_pos, y_pos)
-
-    def get_position(self):
-        return self.rect.x, self.rect.y
+def load_image(name, color_key=None):
+    fullname = os.path.join('data', name)
+    pygame.display.init()
+    if not os.path.isfile(fullname):
+        print(f"Файл с изображением '{fullname}' не найден")
+        sys.exit()
+    image = pygame.image.load(fullname)
+    if color_key is not None:
+        image = image.convert()
+        if color_key == -1:
+            color_key = image.get_at((0, 0))
+        image.set_colorkey(color_key)
+    else:
+        image = image.convert_alpha()
+    return image
 
 
 class Gorynych(pygame.sprite.Sprite):
     def __init__(self, x_pos=300, y_pos=20, *groups):
         super().__init__(groups)
-        filename = os.path.join('data', 'gorynych.png')
-        self.image = pygame.image.load(filename)
+        filename = os.path.join('gorynych.jpg')
+        self.image = load_image(filename)
+        self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x_pos, y_pos)
 
 
 class Fireball(pygame.sprite.Sprite):
-    def __init__(self, x_pos=325, y_pos=20, player=None, *groups):
+    def __init__(self, x_pos=340, y_pos=30, player=None, *groups):
         super().__init__(groups)
-        filename = os.path.join('data', 'fireball.png')
-        self.image = pygame.image.load(filename)
+        filename = os.path.join('fireball.png')
+        self.image = load_image(filename)
         self.image = pygame.transform.scale(self.image, (25, 25))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x_pos, y_pos)
@@ -64,7 +71,7 @@ def main():
     running = True
     size = (700, 400)
     screen = pygame.display.set_mode(size)
-    player = Player(325, 300, player_group)
+    player = Player(325, 300, player_group, animation=False)
     enemy = Gorynych(300, 20, enemy_group)
     motion = dir[4]
     speed = 5
@@ -97,7 +104,7 @@ def main():
             if motion == dir[3]:
                 player.rect.y += speed
 
-        if ticks == 300:
+        if ticks == 100:
             ticks = 0
             fireball = Fireball(325, 30, player, fireball_group)
 

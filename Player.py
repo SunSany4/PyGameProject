@@ -21,8 +21,9 @@ def load_image(name, color_key=None):
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x_pos=30, y_pos=30, *groups):
+    def __init__(self, x_pos=30, y_pos=30, *groups, animation=True):
         super().__init__(groups)
+        self.animation = animation
         self.idle_animation = []
         self.fight_animation = []
         self.dead_animation = []
@@ -57,21 +58,22 @@ class Player(pygame.sprite.Sprite):
         return self.rect.x, self.rect.y
 
     def update(self):
-        self.current_frame += 1
-        if self.current_animation == 'idle':
-            self.current_frame %= len(self.idle_animation)
+        if self.animation:
+            self.current_frame += 1
+            if self.current_animation == 'idle':
+                self.current_frame %= len(self.idle_animation)
 
-            self.image = self.idle_animation[self.current_frame]
-            rect = self.image.get_rect()
-        elif self.current_animation == ' run':
-            self.current_frame %= len(self.run_animation)
+                self.image = self.idle_animation[self.current_frame]
+                rect = self.image.get_rect()
+            elif self.current_animation == ' run':
+                self.current_frame %= len(self.run_animation)
 
-            self.image = self.idle_animation[self.current_frame]
-        elif self.current_animation == 'fight':
-            self.current_frame %= len(self.fight_animation)
+                self.image = self.idle_animation[self.current_frame]
+            elif self.current_animation == 'fight':
+                self.current_frame %= len(self.fight_animation)
 
-            self.image = self.idle_animation[self.current_frame]
-        else:
-            self.current_frame %= len(self.dead_animation)
+                self.image = self.idle_animation[self.current_frame]
+            else:
+                self.current_frame %= len(self.dead_animation)
 
-            self.image = self.idle_animation[self.current_frame]
+                self.image = self.idle_animation[self.current_frame]

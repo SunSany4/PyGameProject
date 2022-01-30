@@ -51,18 +51,17 @@ def surf_draw(q, x, y):  # отрисовка бабы еги Q это карт�
     return surf
 
 
-def run_leshii():
+def run_leshii(text, screen=0, rt=0):
     pygame.init()
     leshii_group = pygame.sprite.Group()
-    size = width, height = 750, 536
-    screen = pygame.display.set_mode(size)
+    size = 750, 536
+    if screen == 0:
+        screen = pygame.display.set_mode(size)
     running = True
     fps = 20
     clock = pygame.time.Clock()
-    text = ['Какой ветер тебя ко мне в лес занес? \nА не лук со стрелами нужен тебе?',
-            'Сослужи службу: колесо водяной сломалось,\n сможешь собрать отплочу чем хочешь', 'Начать.']
-    pos = [(0, 445), (100, 400), (600, 400), (750, 445), (749, 445), (749, 535), (0, 535)]
-    # это координаты отрисовки диолога
+    pos = [(0, 445), (100, 400), (600, 400), (750, 445), (749, 445), (749, 535),
+           (0, 535)]  # это координаты отрисовки диолога
     surface1 = draw_surface(screen)
     pygame.draw.polygon(surface1, (0, 0, 0, 170), pos)
     col = 0
@@ -96,7 +95,12 @@ def run_leshii():
         if col == 3:
             running = False
             screen.fill((0, 0, 0))
-            run(screen)
+            if rt == 0:
+                run(screen)
+            else:
+                # Выход на карту
+                print('Выход на карту, строка 101')
+                exit()
         else:
             lst = text[col].split('\n')
             y = 430
@@ -175,10 +179,10 @@ def run(screen):
         for event in pygame.event.get():
             if event.type == print_message:
                 if time == 0:
-                    end(screen, 0)
+                    end_death(screen)
                     running = False
                 elif cartinka == 16:
-                    end(screen, 1)
+                    end_vin(screen)
                     running = False
                 else:
                     time -= 1
@@ -292,13 +296,47 @@ def run(screen):
     pygame.quit()
 
 
-def end(screen, q):  # после завершения игры надо запустить катцену с победой или СМЕРТЬЮ
-    if q:
-        print('вы выйграли')
-    else:
-        print('Вы проиграли')
-    pass
+def end_death(screen):
+    running = True
+    fps = 20
+    clock = pygame.time.Clock()
+    animation = [pygame.image.load("data/death_leghii_1.bmp"), pygame.image.load("data/death_leghii_2.bmp"),
+                 pygame.image.load("data/death_leghii_3.bmp"), pygame.image.load("data/death_leghii_4.bmp"),
+                 pygame.image.load("data/death_leghii_5.bmp"), pygame.image.load("data/death_leghii_6.bmp"),
+                 pygame.image.load("data/death_leghii_7.bmp"), pygame.image.load("data/death_leghii_8.bmp"),
+                 pygame.image.load("data/death_leghii_9.bmp"), pygame.image.load("data/death_leghii_10.bmp")]
+    bg_surf = animation[0]
+    pygame.transform.scale(bg_surf, (750, 536))
+    surface1 = draw_surface(screen)
+    pygame.draw.polygon(surface1, (0, 0, 0, 200), ((0, 0), (750, 0), (750, 536), (0, 536)))
+    draw_text(surface1, (100, 140), 'Ты мертв!', 150)
+    number_background = 0
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pos() >= (255, 350):
+                    if pygame.mouse.get_pos() <= (525, 418):
+                        # выход в главное меню
+                        print('Выход в главное меню')
+                        exit()
+        number_background = (number_background + 1) % 40
+        bg_surf = animation[number_background // 4]
+        bg_surf = pygame.transform.scale(bg_surf, (750, 536))
+        screen.blit(bg_surf, (0, 0))
+        screen.blit(surface1, (0, 0))
+        pygame.draw.rect(surface1, (255, 0, 0), ((255, 350), (270, 68)))
+        draw_text(surface1, (265, 360), 'начать с начала', 40)
+        clock.tick(fps)
+        pygame.display.flip()
+    pygame.quit()
+
+
+def end_vin(screen):
+    run_leshii(['Спасибо тебе добрый молодец', 'За это я тебе отдам свою кальчугу', 'Идти дальше.'], screen, 1)
 
 
 if __name__ == '__main__':
-    run_leshii()
+    run_leshii(['Какой ветер тебя ко мне в лес занес? \nА не лук со стрелами нужен тебе?',
+                'Сослужи службу: колесо водяной сломалось,\n сможешь собрать отплочу чем хочешь', 'Начать.'])

@@ -13,4 +13,3 @@ class DialogueCharacter(pygame.sprite.Sprite):
         self.image = self.animation[index]
         self.image = pygame.transform.scale(self.image, (self.image.get_width() // x, self.image.get_height() // y))
         self.image.set_colorkey((255, 255, 255))
-

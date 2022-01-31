@@ -21,10 +21,9 @@ def load_image(name, color_key=None):
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x_pos=30, y_pos=30, *groups, animation=True):
+    def __init__(self, x_pos=30, y_pos=30, *groups):
         super().__init__(groups)
         pygame.init()
-        self.animation = animation
         self.idle_animation = []
         self.fight_animation = []
         self.dead_animation = []
@@ -40,6 +39,8 @@ class Player(pygame.sprite.Sprite):
         self.current_animation = 'idle'
         self.run = False
         self.idle = True
+        self.fight = False
+        self.dead = False
         self.health = 100
 
     def change_anim(self, new_animation):
@@ -53,79 +54,104 @@ class Player(pygame.sprite.Sprite):
             if new_animation == 'run':
                 self.run = True
                 self.idle = False
+                self.fight = False
+                self.dead = False
+            elif new_animation == 'idle':
+                self.run = False
+                self.idle = True
+                self.fight = False
+                self.dead = False
+            elif new_animation == 'fight':
+                self.run = False
+                self.idle = False
+                self.fight = True
+                self.dead = False
             else:
                 self.run = False
-                if new_animation == 'idle':
-                    self.idle = True
+                self.idle = False
+                self.fight = False
+                self.dead = True
 
     def cut_dead_animation(self):
         sheet = load_image(os.path.join('PlayerAnim.png'))
-        self.rect = pygame.Rect(0, 0, (sheet.get_width() - 345) // 8,
+        self.rect = pygame.Rect(0, 0, 60,
                                 100)
 
+        left = 0
         for i in range(8):
-            frame_location = (self.rect.w * i, 300)
+            frame_location = (self.rect.w * i, 310)
             self.dead_animation.append(sheet.subsurface(pygame.Rect(
                 frame_location, self.rect.size)))
+            left += 60 + 60
 
     def cut_fight_animation(self):
         sheet = load_image(os.path.join('PlayerAnim.png'))
-        self.rect = pygame.Rect(0, 0, sheet.get_width() // 11,
+        self.rect = pygame.Rect(0, 0, 60,
                                 100)
 
+        left = 0
         for i in range(11):
-            frame_location = (self.rect.w * i, 200)
+            frame_location = (left, 210)
             self.fight_animation.append(sheet.subsurface(pygame.Rect(
                 frame_location, self.rect.size)))
+            left += 59 + 60
 
     def cut_run_animation(self):
         sheet = load_image(os.path.join('PlayerAnim.png'))
-        self.rect = pygame.Rect(0, 0, (sheet.get_width() - 345) // 8,
+        self.rect = pygame.Rect(0, 0, 60,
                                 100)
-
+        left = 0
         for i in range(8):
-            frame_location = (self.rect.w * i, 100)
+            frame_location = (left, 100)
             self.run_animation.append(sheet.subsurface(pygame.Rect(
                 frame_location, self.rect.size)))
+            left += 65 + 60
 
     def cut_idle_animation(self):
         sheet = load_image(os.path.join('PlayerAnim.png'))
-        self.rect = pygame.Rect(0, 0, sheet.get_width() // 11,
+        self.rect = pygame.Rect(0, 0, 60,
                                 100)
-
+        left = 0
         for i in range(11):
-            frame_location = (self.rect.w * i, 0)
+            frame_location = (left, 0)
             self.idle_animation.append(sheet.subsurface(pygame.Rect(
                 frame_location, self.rect.size)))
+            left += 120
 
     def get_position(self):
         return self.rect.x, self.rect.y
 
     def update(self):
-        if self.animation:
-            self.current_frame += 1
-            # print(self.current_frame)
-            if self.current_animation == 'idle':
-                if self.current_frame != 0:
-                    self.current_frame %= len(self.idle_animation)
+        self.current_frame += 1
+        if self.idle:
+            if self.current_frame != 0:
+                self.current_frame %= len(self.idle_animation)
 
-                self.image = self.idle_animation[self.current_frame]
-                print(self.image.get_rect().x, self.image.get_rect().y)
-            elif self.run:
-                if self.current_frame != 0:
-                    self.current_frame %= len(self.run_animation)
+            self.image = self.idle_animation[self.current_frame]
+        elif self.run:
+            if self.current_frame != 0:
+                self.current_frame %= len(self.run_animation)
 
-                self.image = self.run_animation[self.current_frame]
-            elif self.current_animation == 'fight':
-                if self.current_frame != 0:
+            self.image = self.run_animation[self.current_frame]
+        elif self.fight:
+            if self.current_frame != 0:
+                if self.current_frame == len(self.fight_animation):
+                    self.fight = False
+                    self.idle = True
+                else:
                     self.current_frame %= len(self.fight_animation)
 
-                self.image = self.fight_animation[self.current_frame]
-            else:
-                if self.current_frame != 0:
-                    self.current_frame %= len(self.dead_animation)
-
-                self.image = self.dead_animation[self.current_frame]
+                    self.image = self.fight_animation[self.current_frame]
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
+
+    def dead_event(self):
+        self.current_frame = 0
+        ticks = 0
+        while self.current_frame <= 7:
+            self.image = self.dead_animation[self.current_frame]
+            if ticks == 250:
+                self.current_frame += 1
+                ticks = 0
+            ticks += 1

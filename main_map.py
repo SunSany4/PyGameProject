@@ -57,7 +57,7 @@ def main():
     screen.fill('black')
     fon = pygame.transform.scale(pygame.image.load('data/main_map.jpg'), size)
     screen.blit(fon, (0, 0))
-    player = Player(280, 100, player_group, animation=False)
+    player = Player(280, 100, player_group)
     player.image = pygame.transform.scale(player.image, (60, 60))
     motion = dir[4]
     speed = 1
@@ -91,22 +91,25 @@ def main():
             dots_infos.append(dot.get_info())
 
         for i in range(len(dots_infos)):
-            print(dots_infos[i], player_pos)
-            if dots_infos[i][0] <= player_pos[0] <= dots_infos[i][0] + dots_infos[i][2] * 2 and \
-                    dots_infos[i][1] <= player_pos[1] <= dots_infos[i][1] + dots_infos[i][2] * 2:
+            if dots_infos[i][0] - dots_infos[i][2] <= player_pos[0] <= dots_infos[i][0] + dots_infos[i][2] and \
+                    dots_infos[i][1] - dots_infos[i][2] <= player_pos[1] <= dots_infos[i][1] + dots_infos[i][2]:
                 return i + 1
 
         if motion != dir[4]:
             if not player.run:
                 player.change_anim('run')
             if motion == dir[0]:
-                player.rect.x += speed
+                if player.rect.x < 650:
+                    player.rect.x += speed
             if motion == dir[1]:
-                player.rect.x -= speed
+                if player.rect.x > 5:
+                    player.rect.x -= speed
             if motion == dir[2]:
-                player.rect.y -= speed
+                if player.rect.y > 5:
+                    player.rect.y -= speed
             if motion == dir[3]:
-                player.rect.y += speed
+                if player.rect.y < 300:
+                    player.rect.y += speed
         else:
             if not player.idle:
                 player.change_anim('idle')

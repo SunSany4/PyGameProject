@@ -38,7 +38,7 @@ class Fireball(pygame.sprite.Sprite):
     def __init__(self, x_pos=340, y_pos=30, player=None, *groups):
         super().__init__(groups)
         filename = os.path.join('fireball.png')
-        self.image = load_image(filename)
+        self.image = load_image(filename, -1)
         self.image = pygame.transform.scale(self.image, (24, 24))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x_pos, y_pos)
@@ -78,11 +78,12 @@ def main():
     screen = pygame.display.set_mode(size)
     fon = pygame.transform.scale(pygame.image.load('data/fight_background.png'), size)
     screen.blit(fon, (0, 0))
-    player = Player(325, 300, player_group, animation=False)
+    player = Player(325, 300, player_group)
     enemy = Gorynych(300, 50, enemy_group)
     motion = dir[4]
     speed = 5
     ticks = 0
+    player_ticks = 0
 
     while running:
 
@@ -99,6 +100,7 @@ def main():
                 if event.key == pygame.K_DOWN:
                     motion = dir[3]
                 if event.key == pygame.K_SPACE:
+                    player.change_anim('fight')
                     player_pos = player.get_position()
                     if 300 <= player_pos[0] <= 350 and\
                             abs(player_pos[1] - 150) <= 40:
@@ -107,18 +109,31 @@ def main():
                 motion = dir[4]
 
         if motion != dir[4]:
+            if not player.run and not player.fight:
+                player.change_anim('run')
             if motion == dir[0]:
-                player.rect.x += speed
+                if player.rect.x < 650:
+                    player.rect.x += speed
             if motion == dir[1]:
-                player.rect.x -= speed
+                if player.rect.x > 5:
+                    player.rect.x -= speed
             if motion == dir[2]:
-                player.rect.y -= speed
+                if player.rect.y > 5:
+                    player.rect.y -= speed
             if motion == dir[3]:
-                player.rect.y += speed
+                if player.rect.y < 300:
+                    player.rect.y += speed
+        else:
+            if not player.idle and not player.fight:
+                player.change_anim('idle')
 
         if ticks == 100:
             ticks = 0
             fireball = Fireball(325, 30, player, fireball_group)
+
+        if player_ticks == 10:
+            player_ticks = 0
+            player_group.update()
 
         pygame.event.pump()
 
@@ -137,7 +152,7 @@ def main():
                     player.health -= 10
 
         if player.health <= 0:
-            return False
+            running = False
         if enemy.health <= 0:
             return True
 
@@ -146,8 +161,20 @@ def main():
         clock.tick(FPS)
 
         ticks += 1
+        player_ticks += 1
 
-    pygame.QUIT()
+        if not running:
+            frame = 0
+            player.change_anim('dead')
+            ticks = 0
+            while frame <= 7:
+                print(ticks)
+                player.image = player.dead_animation[frame]
+                if ticks % 10000 == 0:
+                    frame += 1
+                if ticks == 80000:
+                    return False
+                ticks += 1
 
 
 if __name__ == '__main__':

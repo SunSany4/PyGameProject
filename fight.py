@@ -27,10 +27,11 @@ class Gorynych(pygame.sprite.Sprite):
     def __init__(self, x_pos=300, y_pos=20, *groups):
         super().__init__(groups)
         filename = os.path.join('gorynych.jpg')
-        self.image = load_image(filename)
+        self.image = load_image(filename, -1)
         self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x_pos, y_pos)
+        self.health = 100
 
 
 class Fireball(pygame.sprite.Sprite):
@@ -38,7 +39,7 @@ class Fireball(pygame.sprite.Sprite):
         super().__init__(groups)
         filename = os.path.join('fireball.png')
         self.image = load_image(filename)
-        self.image = pygame.transform.scale(self.image, (25, 25))
+        self.image = pygame.transform.scale(self.image, (24, 24))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x_pos, y_pos)
         self.speed = 10
@@ -50,6 +51,7 @@ class Fireball(pygame.sprite.Sprite):
             self.dir_y = random()
         else:
             player_x, player_y = player.get_position()
+            player_x += 20
             dx = player_x - self.rect.x
             dy = abs(player_y - self.rect.y)
             angle = math.degrees(math.atan(dx / dy))
@@ -59,6 +61,9 @@ class Fireball(pygame.sprite.Sprite):
     def move(self):
         self.rect.x += self.speed * self.dir_x
         self.rect.y += self.speed * self.dir_y
+
+    def get_position(self):
+        return self.rect.x, self.rect.y, 12
 
 
 def main():
@@ -71,8 +76,10 @@ def main():
     running = True
     size = (700, 400)
     screen = pygame.display.set_mode(size)
+    fon = pygame.transform.scale(pygame.image.load('data/fight_background.png'), size)
+    screen.blit(fon, (0, 0))
     player = Player(325, 300, player_group, animation=False)
-    enemy = Gorynych(300, 20, enemy_group)
+    enemy = Gorynych(300, 50, enemy_group)
     motion = dir[4]
     speed = 5
     ticks = 0
@@ -91,6 +98,11 @@ def main():
                     motion = dir[2]
                 if event.key == pygame.K_DOWN:
                     motion = dir[3]
+                if event.key == pygame.K_SPACE:
+                    player_pos = player.get_position()
+                    if 300 <= player_pos[0] <= 350 and\
+                            abs(player_pos[1] - 150) <= 40:
+                        enemy.health -= 20
             else:
                 motion = dir[4]
 
@@ -110,11 +122,25 @@ def main():
 
         pygame.event.pump()
 
-        screen.fill('black')
+        screen.blit(fon, (0, 0))
         player_group.draw(screen)
         enemy_group.draw(screen)
+        player_pos = player.get_position()
+        fireballs_info = []
         for fireball in fireball_group:
             fireball.move()
+            fireballs_info.append(fireball.get_position())
+
+        for fireball in fireballs_info:
+            if player_pos[0] <= fireball[0] + fireball[2] <= player_pos[0] + 57 and\
+                player_pos[1] <= fireball[1] + fireball[2] <= player_pos[1] + 57:
+                    player.health -= 10
+
+        if player.health <= 0:
+            return False
+        if enemy.health <= 0:
+            return True
+
         fireball_group.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

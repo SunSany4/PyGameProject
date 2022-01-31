@@ -2,7 +2,10 @@ import pygame
 import os
 import sys
 from Player import *
-import fight
+
+
+def clear_screen(screen, fon):
+    screen.blit(fon, (0, 0))
 
 
 def load_image(name, color_key=None):
@@ -26,9 +29,10 @@ class LevelDot(pygame.sprite.Sprite):
     def __init__(self, x_pos, y_pos, *groups):
         super().__init__(groups)
         self.image = load_image('level_dot.png', -1)
+        self.image = pygame.transform.scale(self.image, (30, 30))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x_pos, y_pos)
-        self.rad = 25
+        self.rad = 15
         self.x_pos = x_pos
         self.y_pos = y_pos
 
@@ -37,20 +41,32 @@ class LevelDot(pygame.sprite.Sprite):
 
 
 def main():
+    pygame.init()
+    pygame.font.init()
     player_group = pygame.sprite.Group()
     level_dots_group = pygame.sprite.Group()
     FPS = 60
 
     dir = ('RIGHT', 'LEFT', 'UP', 'DOWN', 'STOP')
     clock = pygame.time.Clock()
-    running = True
     size = (700, 400)
     screen = pygame.display.set_mode(size)
-    player = Player(30, 30, player_group, animation=False)
+    level = open('level_pos.txt').readline()
+
+    running = True
+    screen.fill('black')
+    fon = pygame.transform.scale(pygame.image.load('data/main_map.jpg'), size)
+    screen.blit(fon, (0, 0))
+    player = Player(280, 100, player_group, animation=False)
+    player.image = pygame.transform.scale(player.image, (60, 60))
     motion = dir[4]
-    speed = 5
-    level_1 = LevelDot(100, 300, level_dots_group)
-    level_2 = LevelDot(600, 100, level_dots_group)
+    speed = 1
+    level_1 = LevelDot(150, 150, level_dots_group)
+    if '2' in level:
+        level_2 = LevelDot(260, 240, level_dots_group)
+    if '3' in level:
+        level_3 = LevelDot(550, 200, level_dots_group)
+    ticks = 0
 
     while running:
 
@@ -70,13 +86,19 @@ def main():
                 motion = dir[4]
 
         player_pos = player.get_position()
-        dot_2_info = level_2.get_info()
+        dots_infos = []
+        for dot in level_dots_group:
+            dots_infos.append(dot.get_info())
 
-        if dot_2_info[0] <= player_pos[0] <= dot_2_info[0] + 2 * dot_2_info[2] and\
-                dot_2_info[1] <= player_pos[1] <= dot_2_info[1] + 2 * dot_2_info[2]:
-            return 2
+        for i in range(len(dots_infos)):
+            print(dots_infos[i], player_pos)
+            if dots_infos[i][0] <= player_pos[0] <= dots_infos[i][0] + dots_infos[i][2] * 2 and \
+                    dots_infos[i][1] <= player_pos[1] <= dots_infos[i][1] + dots_infos[i][2] * 2:
+                return i + 1
 
         if motion != dir[4]:
+            if not player.run:
+                player.change_anim('run')
             if motion == dir[0]:
                 player.rect.x += speed
             if motion == dir[1]:
@@ -85,9 +107,16 @@ def main():
                 player.rect.y -= speed
             if motion == dir[3]:
                 player.rect.y += speed
+        else:
+            if not player.idle:
+                player.change_anim('idle')
 
-        screen.fill('black')
-        player_group.draw(screen)
+        ticks += 1
+        if ticks == 10:
+            player.update()
+            ticks = 0
+        clear_screen(screen, fon)
+        player.draw(screen)
         level_dots_group.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
@@ -96,7 +125,4 @@ def main():
 
 
 if __name__ == '__main__':
-    next_scene = main()
-    print(next_scene)
-    if next_scene == 2:
-        fight.main()
+    main()

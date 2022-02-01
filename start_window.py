@@ -38,7 +38,7 @@ def main():
             elif event.type == pygame.KEYDOWN or \
                     event.type == pygame.MOUSEBUTTONDOWN:
                 return
-        if ticks == 450:
+        if ticks == 200:
             player_group.update()
             ticks = 0
         ticks += 1

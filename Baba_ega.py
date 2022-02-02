@@ -63,9 +63,7 @@ def baba_ege_run(dialog_text, screen=0, rt=0):
             if rt == 0:
                 baba_ege_house(screen, baba_ega_group, bg_baba_ega)
             else:
-                # выход на карту
-                print('Выход на карту, строка 67')
-                exit()
+                return True
         else:
             lst = dialog_text[col].split('\n')
             y = 430
@@ -171,6 +169,8 @@ def end_death(screen):  # завершение игры (смерть) и вых
 
 def end_vin(screen):
     txt = ['Спасибо тебе добрый молодец,', 'За это тебе я отдам\n свой меч кладинец.', 'Идти дальше.']
+    with open('level_pos.txt', 'a', encoding='utf-8') as file:
+        print(' 3', file=file)
     baba_ege_run(txt, screen, 1)
 
 

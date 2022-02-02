@@ -152,7 +152,7 @@ def main():
                     player.health -= 10
 
         if player.health <= 0:
-            running = False
+            return False
         if enemy.health <= 0:
             return True
 
@@ -163,18 +163,18 @@ def main():
         ticks += 1
         player_ticks += 1
 
-        if not running:
-            frame = 0
-            player.change_anim('dead')
-            ticks = 0
-            while frame <= 7:
-                print(ticks)
-                player.image = player.dead_animation[frame]
-                if ticks % 10000 == 0:
-                    frame += 1
-                if ticks == 80000:
-                    return False
-                ticks += 1
+        # if not running:
+        #     frame = 0
+        #     player.change_anim('dead')
+        #     ticks = 0
+        #     while frame <= 7:
+        #         print(ticks)
+        #         player.image = player.dead_animation[frame]
+        #         if ticks % 10000 == 0:
+        #             frame += 1
+        #         if ticks == 80000:
+        #             return False
+        #         ticks += 1
 
 
 if __name__ == '__main__':

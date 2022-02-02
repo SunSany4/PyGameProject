@@ -98,9 +98,7 @@ def run_leshii(text, screen=0, rt=0):
             if rt == 0:
                 run(screen)
             else:
-                # Выход на карту
-                print('Выход на карту, строка 101')
-                exit()
+                return True
         else:
             lst = text[col].split('\n')
             y = 430
@@ -182,6 +180,8 @@ def run(screen):
                     end_death(screen)
                     running = False
                 elif cartinka == 16:
+                    with open('level_pos.txt', 'a', encoding='utf-8') as file:
+                        print(' 2', file=file, end='')
                     end_vin(screen)
                     running = False
                 else:
@@ -318,9 +318,7 @@ def end_death(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pos() >= (255, 350):
                     if pygame.mouse.get_pos() <= (525, 418):
-                        # выход в главное меню
-                        print('Выход в главное меню')
-                        exit()
+                        return False
         number_background = (number_background + 1) % 40
         bg_surf = animation[number_background // 4]
         bg_surf = pygame.transform.scale(bg_surf, (750, 536))
@@ -330,11 +328,12 @@ def end_death(screen):
         draw_text(surface1, (265, 360), 'начать с начала', 40)
         clock.tick(fps)
         pygame.display.flip()
-    pygame.quit()
+    return False
 
 
 def end_vin(screen):
     run_leshii(['Спасибо тебе добрый молодец', 'За это я тебе отдам свою кальчугу', 'Идти дальше.'], screen, 1)
+    return True
 
 
 if __name__ == '__main__':

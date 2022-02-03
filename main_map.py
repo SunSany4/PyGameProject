@@ -52,7 +52,7 @@ def main():
     size = (750, 536)
     screen = pygame.display.set_mode(size)
     pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
-    pygame.display.set_caption('test caption')
+    pygame.display.set_caption('Тридевятое царство')
     level = open('level_pos.txt').readline()
 
     running = True

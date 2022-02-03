@@ -46,7 +46,7 @@ def main():
     size = [750, 536]
     screen = pygame.display.set_mode(size)
     pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
-    pygame.display.set_caption('test caption')
+    pygame.display.set_caption('Тридевятое царство')
     #    text.append('Нажмите на любую кнопку для продолжения...')
 
     col = 0  # переменная для отслеживания сколько раз игрок нажал ентер

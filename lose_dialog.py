@@ -34,7 +34,7 @@ def main():
     size = [750, 536]
     screen = pygame.display.set_mode(size)
     pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
-    pygame.display.set_caption('test caption')
+    pygame.display.set_caption('Тридевятое царство')
     screen.fill('black')
     fon = pygame.transform.scale(pygame.image.load('data' + '/' + 'backgrd.jpeg'), size)
     screen.blit(fon, (0, 0))

@@ -77,7 +77,7 @@ def main():
     size = (750, 536)
     screen = pygame.display.set_mode(size)
     pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
-    pygame.display.set_caption('test caption')
+    pygame.display.set_caption('Тридевятое царство')
     fon = pygame.transform.scale(pygame.image.load('data/fight_background.png'), size)
     screen.blit(fon, (0, 0))
     player = Player(325, 300, player_group)

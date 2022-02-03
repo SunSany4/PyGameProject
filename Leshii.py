@@ -58,7 +58,7 @@ def run_leshii(text, screen=0, rt=0):
     if screen == 0:
         screen = pygame.display.set_mode(size)
         pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
-        pygame.display.set_caption('test caption')
+        pygame.display.set_caption('Тридевятое царство')
     running = True
     fps = 20
     clock = pygame.time.Clock()

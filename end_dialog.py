@@ -31,7 +31,7 @@ def main():
     pygame.init()
     pygame.font.init()
     text = load_text('end dialog text.txt')
-    size = [700, 400]
+    size = [750, 536]
     screen = pygame.display.set_mode(size)
     screen.fill('black')
     fon = pygame.transform.scale(pygame.image.load('data' + '/' + 'backgrd.jpeg'), size)

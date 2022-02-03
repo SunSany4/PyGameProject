@@ -49,7 +49,7 @@ def main():
 
     dir = ('RIGHT', 'LEFT', 'UP', 'DOWN', 'STOP')
     clock = pygame.time.Clock()
-    size = (700, 400)
+    size = (750, 536)
     screen = pygame.display.set_mode(size)
     level = open('level_pos.txt').readline()
 
@@ -61,11 +61,17 @@ def main():
     player.image = pygame.transform.scale(player.image, (60, 60))
     motion = dir[4]
     speed = 1
-    level_1 = LevelDot(150, 150, level_dots_group)
+    text = {
+        '1': (162, 210)
+    }
+    level_1 = LevelDot(150, 200, level_dots_group)
     if '2' in level:
-        level_2 = LevelDot(260, 240, level_dots_group)
+        text['2'] = (312, 320)
+        level_2 = LevelDot(300, 310, level_dots_group)
     if '3' in level:
-        level_3 = LevelDot(550, 200, level_dots_group)
+        text['3'] = (597, 285)
+        level_3 = LevelDot(585, 275, level_dots_group)
+
     ticks = 0
 
     while running:
@@ -99,7 +105,7 @@ def main():
             if not player.run:
                 player.change_anim('run')
             if motion == dir[0]:
-                if player.rect.x < 650:
+                if player.rect.x < 700:
                     player.rect.x += speed
             if motion == dir[1]:
                 if player.rect.x > 5:
@@ -108,7 +114,7 @@ def main():
                 if player.rect.y > 5:
                     player.rect.y -= speed
             if motion == dir[3]:
-                if player.rect.y < 300:
+                if player.rect.y < 436:
                     player.rect.y += speed
         else:
             if not player.idle:
@@ -121,6 +127,11 @@ def main():
         clear_screen(screen, fon)
         player.draw(screen)
         level_dots_group.draw(screen)
+        font = pygame.font.Font(None, 20)
+        for line, text_coord in text.items():
+            string_rendered = font.render(line, 1, pygame.Color('black'))
+            intro_rect = string_rendered.get_rect()
+            screen.blit(string_rendered, text_coord)
         pygame.display.flip()
         clock.tick(FPS)
 

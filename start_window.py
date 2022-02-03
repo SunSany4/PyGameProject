@@ -20,9 +20,9 @@ def main():
     pygame.init()
     pygame.font.init()
     player_group = pygame.sprite.Group()
-    player = Player(550, 300, player_group)
+    player = Player(650, 420, player_group)
     text = ['Кликните мышкой в любое место, чтобы начать игру']
-    size = [700, 400]
+    size = [750, 536]
     screen = pygame.display.set_mode(size)
     screen.fill('black')
     fon = pygame.transform.scale(load_image('backgrd.jpeg'), size)

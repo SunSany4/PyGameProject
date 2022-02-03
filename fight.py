@@ -74,12 +74,12 @@ def main():
     dir = ('RIGHT', 'LEFT', 'UP', 'DOWN', 'STOP')
     clock = pygame.time.Clock()
     running = True
-    size = (700, 400)
+    size = (750, 536)
     screen = pygame.display.set_mode(size)
     fon = pygame.transform.scale(pygame.image.load('data/fight_background.png'), size)
     screen.blit(fon, (0, 0))
     player = Player(325, 300, player_group)
-    enemy = Gorynych(300, 50, enemy_group)
+    enemy = Gorynych(300, 150, enemy_group)
     motion = dir[4]
     speed = 5
     ticks = 0
@@ -103,7 +103,7 @@ def main():
                     player.change_anim('fight')
                     player_pos = player.get_position()
                     if 300 <= player_pos[0] <= 350 and\
-                            abs(player_pos[1] - 150) <= 40:
+                            abs(player_pos[1] - 250) <= 40:
                         enemy.health -= 20
             else:
                 motion = dir[4]
@@ -111,8 +111,10 @@ def main():
         if motion != dir[4]:
             if not player.run and not player.fight:
                 player.change_anim('run')
+            if not player.run:
+                player.change_anim('run')
             if motion == dir[0]:
-                if player.rect.x < 650:
+                if player.rect.x < 700:
                     player.rect.x += speed
             if motion == dir[1]:
                 if player.rect.x > 5:
@@ -121,7 +123,7 @@ def main():
                 if player.rect.y > 5:
                     player.rect.y -= speed
             if motion == dir[3]:
-                if player.rect.y < 300:
+                if player.rect.y < 436:
                     player.rect.y += speed
         else:
             if not player.idle and not player.fight:
@@ -129,7 +131,7 @@ def main():
 
         if ticks == 100:
             ticks = 0
-            fireball = Fireball(325, 30, player, fireball_group)
+            fireball = Fireball(325, 130, player, fireball_group)
 
         if player_ticks == 10:
             player_ticks = 0

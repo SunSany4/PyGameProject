@@ -285,7 +285,6 @@ def run(screen):
                     image_16.rect = pos_pole[15]
                     pole_16.rect = 10000, 10000
                     cartinka += 1
-                print(pos_image, cartinka)
             if event.type == pygame.QUIT:
                 running = False
         screen.blit(bg_surf, (0, 0))

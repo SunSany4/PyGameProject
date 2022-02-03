@@ -76,6 +76,8 @@ def main():
     running = True
     size = (750, 536)
     screen = pygame.display.set_mode(size)
+    pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
+    pygame.display.set_caption('Тридевятое царство')
     fon = pygame.transform.scale(pygame.image.load('data/fight_background.png'), size)
     screen.blit(fon, (0, 0))
     player = Player(325, 300, player_group)
@@ -102,7 +104,7 @@ def main():
                 if event.key == pygame.K_SPACE:
                     player.change_anim('fight')
                     player_pos = player.get_position()
-                    if 300 <= player_pos[0] <= 350 and\
+                    if 300 <= player_pos[0] <= 350 and \
                             abs(player_pos[1] - 250) <= 40:
                         enemy.health -= 20
             else:
@@ -149,15 +151,14 @@ def main():
             fireballs_info.append(fireball.get_position())
 
         for fireball in fireballs_info:
-            if player_pos[0] <= fireball[0] + fireball[2] <= player_pos[0] + 57 and\
-                player_pos[1] <= fireball[1] + fireball[2] <= player_pos[1] + 57:
-                    player.health -= 10
-
+            if player_pos[0] <= fireball[0] + fireball[2] <= player_pos[0] + 57 and \
+                    player_pos[1] <= fireball[1] + fireball[2] <= player_pos[1] + 57:
+                player.health -= 10
         if player.health <= 0:
             return False
         if enemy.health <= 0:
             return True
-
+        print(enemy.health)
         fireball_group.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

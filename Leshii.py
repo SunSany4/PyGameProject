@@ -57,6 +57,8 @@ def run_leshii(text, screen=0, rt=0):
     size = 750, 536
     if screen == 0:
         screen = pygame.display.set_mode(size)
+        pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
+        pygame.display.set_caption('Тридевятое царство')
     running = True
     fps = 20
     clock = pygame.time.Clock()
@@ -285,7 +287,6 @@ def run(screen):
                     image_16.rect = pos_pole[15]
                     pole_16.rect = 10000, 10000
                     cartinka += 1
-                print(pos_image, cartinka)
             if event.type == pygame.QUIT:
                 running = False
         screen.blit(bg_surf, (0, 0))

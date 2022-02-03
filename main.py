@@ -41,3 +41,5 @@ if level == 3:
         if level == 3:
             result = fight.main()
 end_dialog.main()
+with open('level_pos.txt', 'w', encoding='utf-8') as file:
+    print('1', file=file, end='')

@@ -7,13 +7,13 @@ import start_dialog
 import end_dialog
 import lose_dialog
 
-
 start_window.main()
 start_dialog.main()
 level = main_map.main()
 if level == 1:
     result = Leshii.run_leshii(['Какой ветер тебя ко мне в лес занес? \nА не лук со стрелами нужен тебе?',
-                'Сослужи службу: колесо водяной сломалось,\n сможешь собрать отплочу чем хочешь', 'Начать.'])
+                                'Сослужи службу: колесо водяной сломалось,\n сможешь собрать отплочу чем хочешь',
+                                'Начать.'])
     lst = open('level_pos.txt', 'r', encoding='utf-8').readline()
     while '2' not in lst:
         level = main_map.main()

@@ -39,7 +39,7 @@ def draw_text(screen, pos, dialog_text, size):  # отрисовка текст�
     pygame.display.update()
 
 
-def main():
+def main(time_game=1):
     pygame.init()
     pygame.font.init()
     text = load_text('end dialog text.txt')
@@ -53,7 +53,7 @@ def main():
     pygame.draw.polygon(surface1, (0, 0, 0, 170), pos)
 
     running = True
-
+    text[-1] = text[-1] + 'enter' + f'Вы прошли игру за {time_game} секунд'
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
         self.idle = True
         self.fight = False
         self.dead = False
-        self.health = 100
+        self.health = 150
 
     def change_anim(self, new_animation):
         try:

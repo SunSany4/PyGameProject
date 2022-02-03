@@ -51,6 +51,8 @@ def main():
     clock = pygame.time.Clock()
     size = (750, 536)
     screen = pygame.display.set_mode(size)
+    pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
+    pygame.display.set_caption('test caption')
     level = open('level_pos.txt').readline()
 
     running = True

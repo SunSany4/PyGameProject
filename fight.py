@@ -76,6 +76,8 @@ def main():
     running = True
     size = (750, 536)
     screen = pygame.display.set_mode(size)
+    pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
+    pygame.display.set_caption('test caption')
     fon = pygame.transform.scale(pygame.image.load('data/fight_background.png'), size)
     screen.blit(fon, (0, 0))
     player = Player(325, 300, player_group)
@@ -156,7 +158,7 @@ def main():
             return False
         if enemy.health <= 0:
             return True
-
+        print(enemy.health)
         fireball_group.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

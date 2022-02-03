@@ -6,7 +6,9 @@ import fight
 import start_dialog
 import end_dialog
 import lose_dialog
+import time
 
+time_start = time.time()
 start_window.main()
 start_dialog.main()
 level = main_map.main()
@@ -40,4 +42,6 @@ if level == 3:
         level = main_map.main()
         if level == 3:
             result = fight.main()
-end_dialog.main()
+time_end = time.time()
+time_game = int(time_end - time_start)
+end_dialog.main(time_game)

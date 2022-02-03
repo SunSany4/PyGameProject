@@ -6,7 +6,9 @@ import fight
 import start_dialog
 import end_dialog
 import lose_dialog
+import time
 
+time_start = time.time()
 start_window.main()
 start_dialog.main()
 level = main_map.main()
@@ -40,6 +42,15 @@ if level == 3:
         level = main_map.main()
         if level == 3:
             result = fight.main()
-end_dialog.main()
+time_end = time.time()
+time_game = int(time_end - time_start)
+if open('min_time.txt').readline() != '---':
+    if int(open('min_time.txt').readline()) > int(time_end - time_start):
+        with open('min_time.txt', 'w') as F:
+            F.writelines([str(int(time_end - time_start))])
+else:
+    with open('min_time.txt', 'w') as F:
+        F.writelines([str(int(time_end - time_start))])
+end_dialog.main(int(time_end - time_start))
 with open('level_pos.txt', 'w', encoding='utf-8') as file:
     print('1', file=file, end='')

@@ -39,7 +39,7 @@ def draw_text(screen, pos, dialog_text, size):  # отрисовка текст�
     pygame.display.update()
 
 
-def main(time_game=1):
+def main(time_game):
     pygame.init()
     pygame.font.init()
     text = load_text('end dialog text.txt')
@@ -92,4 +92,4 @@ def main(time_game=1):
 
 
 if __name__ == "__main__":
-    main()
+    main(6)

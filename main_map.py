@@ -40,6 +40,13 @@ class LevelDot(pygame.sprite.Sprite):
         return self.x_pos, self.y_pos, self.rad
 
 
+def draw_text(screen, pos, text, size):  # отрисовка текста screen это поверхность на которой нужно нарисовать
+    #  pos это позиция size это размер текст
+    f = pygame.font.SysFont('arial', size)
+    screen.blit(f.render(text, 1, (255, 255, 255)), pos)
+    pygame.display.update()
+
+
 def main():
     pygame.init()
     pygame.font.init()
@@ -75,6 +82,7 @@ def main():
         level_3 = LevelDot(585, 275, level_dots_group)
 
     ticks = 0
+    draw_text(fon, (350, 40), 'Управляя стрелками зайдите на поле.', 25)
 
     while running:
 

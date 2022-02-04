@@ -94,8 +94,8 @@ def main():
     ticks = 0
     player_ticks = 0
 
-    draw_text(fon, (100, 40), 'Управляя стрелками уварачиваетесь от шаров.', 35)  # Информация для играка
-    draw_text(fon, (100, 75), 'Нажимайти пробел что-бы отаковать.', 35)  # которая проподет через 5 секунд
+    draw_text(fon, (100, 40), 'Управляя стрелочками уварачивайся от шаров.', 35)  # Информация для играка
+    draw_text(fon, (100, 75), 'Нажимай пробел что-бы отаковать.', 35)  # которая пропадет через 5 секунд
     print_message = pygame.USEREVENT
     pygame.time.set_timer(print_message, 1000)
     time = 0
@@ -143,7 +143,7 @@ def main():
                 if player.rect.y > 5:
                     player.rect.y -= speed
             if motion == dir[3]:
-                if player.rect.y < 436:
+                if player.rect.y < 596:
                     player.rect.y += speed
         else:
             if not player.idle and not player.fight:

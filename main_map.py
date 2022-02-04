@@ -82,13 +82,14 @@ def main():
         level_3 = LevelDot(585, 275, level_dots_group)
 
     ticks = 0
-    draw_text(fon, (350, 40), 'Управляя стрелками зайдите на поле.', 25)
+    draw_text(fon, (340, 40), 'Управляя стрелками зайдите на кружок.', 25)
 
     while running:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                sys.exit('main.py')
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
                     motion = dir[0]

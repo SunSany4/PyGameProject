@@ -1,4 +1,5 @@
 import pygame
+import sys
 from class_1 import DialogueCharacter
 
 
@@ -39,6 +40,7 @@ def baba_ege_run(dialog_text, screen=0, rt=0):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                run_exit()
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:  # если игрок кликает мышкой или наживает энтер то следуйщая фраза
                 col += 1
@@ -105,6 +107,7 @@ def baba_ege_house(screen, baba_ega_group, bg_baba_ega):
                 else:
                     time -= 1
             if event.type == pygame.QUIT:
+                run_exit()
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = event.pos
@@ -150,6 +153,7 @@ def end_death(screen):  # завершение игры (смерть) и вых
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                run_exit()
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pos() >= (255, 350):
@@ -174,6 +178,10 @@ def end_vin(screen):
     with open('level_pos.txt', 'a', encoding='utf-8') as file:
         print(' 3', file=file)
     baba_ege_run(txt, screen, 1)
+
+
+def run_exit():
+    sys.exit('main.py')
 
 
 if __name__ == '__main__':

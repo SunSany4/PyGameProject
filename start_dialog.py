@@ -60,6 +60,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                sys.exit('main.py')
             if event.type == pygame.MOUSEBUTTONDOWN:  # если игрок кликает мышкой или наживает энтер то следуйщая фраза
                 col += 1
                 surface1 = draw_surface(screen)  # отрисовка диолога

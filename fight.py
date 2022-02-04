@@ -104,6 +104,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                sys.exit('main.py')
             if event.type == print_message:
                 if time == 5:
                     fon = pygame.transform.scale(pygame.image.load('data/fight_background.png'), size)

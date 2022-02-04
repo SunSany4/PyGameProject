@@ -3,6 +3,7 @@ import random
 from class_1 import DialogueCharacter
 import sys
 
+
 class Picture(pygame.sprite.Sprite):
     def __init__(self, x_pos, y_pos, imag, number, *groups):
         super().__init__(groups)

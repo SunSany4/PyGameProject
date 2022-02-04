@@ -21,7 +21,9 @@ def main():
     pygame.font.init()
     player_group = pygame.sprite.Group()
     player = Player(650, 420, player_group)
-    text = ['Кликните мышкой в любое место, чтобы начать игру']
+    min_time = open('min_time.txt').readline()
+    text = ['Кликните мышкой в любое место, чтобы начать игру', '', '', '                            Лучшее время:',
+            f'                                      {min_time}']
     size = [750, 536]
     screen = pygame.display.set_mode(size)
     pygame.display.set_icon(pygame.image.load('data/icon.jpg').convert())
@@ -30,13 +32,14 @@ def main():
     fon = pygame.transform.scale(load_image('backgrd.jpeg'), size)
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 20)
-    text_coord = 20
+    text_coord = 60
     ticks = 0
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit('main.py')
             elif event.type == pygame.KEYDOWN or \
                     event.type == pygame.MOUSEBUTTONDOWN:
                 return

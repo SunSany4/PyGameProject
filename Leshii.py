@@ -1,7 +1,7 @@
 import pygame
 import random
 from class_1 import DialogueCharacter
-
+import sys
 
 class Picture(pygame.sprite.Sprite):
     def __init__(self, x_pos, y_pos, imag, number, *groups):
@@ -74,6 +74,7 @@ def run_leshii(text, screen=0, rt=0):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                run_exit()
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:  # если игрок кликает мышкой или наживает энтер то следуйщая фраза
                 col += 1
@@ -288,6 +289,7 @@ def run(screen):
                     pole_16.rect = 10000, 10000
                     cartinka += 1
             if event.type == pygame.QUIT:
+                run_exit()
                 running = False
         screen.blit(bg_surf, (0, 0))
         screen.blit(surface1, (0, 0))
@@ -315,6 +317,7 @@ def end_death(screen):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                run_exit()
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pos() >= (255, 350):
@@ -335,6 +338,10 @@ def end_death(screen):
 def end_vin(screen):
     run_leshii(['Спасибо тебе добрый молодец', 'За это я тебе отдам свою кальчугу', 'Идти дальше.'], screen, 1)
     return True
+
+
+def run_exit():
+    sys.exit('main.py')
 
 
 if __name__ == '__main__':

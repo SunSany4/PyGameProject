@@ -39,7 +39,7 @@ def draw_text(screen, pos, dialog_text, size):  # отрисовка текст�
     pygame.display.update()
 
 
-def main(time_game=1):
+def main(time_game):
     pygame.init()
     pygame.font.init()
     text = load_text('end dialog text.txt')
@@ -60,6 +60,7 @@ def main(time_game=1):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                sys.exit('main.py')
             if event.type == pygame.MOUSEBUTTONDOWN:  # если игрок кликает мышкой или наживает энтер то следуйщая фраза
                 col += 1
                 surface1 = draw_surface(screen)  # отрисовка диолога
@@ -92,4 +93,4 @@ def main(time_game=1):
 
 
 if __name__ == "__main__":
-    main()
+    main(6)

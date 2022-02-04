@@ -66,6 +66,13 @@ class Fireball(pygame.sprite.Sprite):
         return self.rect.x, self.rect.y, 12
 
 
+def draw_text(screen, pos, text, size):  # отрисовка текста screen это поверхность на которой нужно нарисовать
+    #  pos это позиция size это размер текст
+    f = pygame.font.SysFont('arial', size)
+    screen.blit(f.render(text, 1, (255, 255, 255)), pos)
+    pygame.display.update()
+
+
 def main():
     player_group = pygame.sprite.Group()
     enemy_group = pygame.sprite.Group()
@@ -87,11 +94,22 @@ def main():
     ticks = 0
     player_ticks = 0
 
-    while running:
+    draw_text(fon, (100, 40), 'Управляя стрелочками уварачивайся от шаров.', 35)  # Информация для играка
+    draw_text(fon, (100, 75), 'Нажимай пробел что-бы отаковать.', 35)  # которая пропадет через 5 секунд
+    print_message = pygame.USEREVENT
+    pygame.time.set_timer(print_message, 1000)
+    time = 0
 
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                sys.exit('main.py')
+            if event.type == print_message:
+                if time == 5:
+                    fon = pygame.transform.scale(pygame.image.load('data/fight_background.png'), size)
+                    screen.blit(fon, (0, 0))
+                time += 1
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
                     motion = dir[0]
@@ -125,7 +143,7 @@ def main():
                 if player.rect.y > 5:
                     player.rect.y -= speed
             if motion == dir[3]:
-                if player.rect.y < 436:
+                if player.rect.y < 596:
                     player.rect.y += speed
         else:
             if not player.idle and not player.fight:
@@ -158,7 +176,6 @@ def main():
             return False
         if enemy.health <= 0:
             return True
-        print(enemy.health)
         fireball_group.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
